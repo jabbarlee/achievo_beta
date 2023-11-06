@@ -1,0 +1,55 @@
+body{
+    margin: 0;
+    padding: 0;
+    background-color: #f1faee;
+}
+
+#pageDiv {
+    display: flex;
+    justify-content: space-between; /* Space between the two divs */
+    align-items: center; /* Center vertically */
+    height: 100vh;
+}
+
+.divs {
+    flex: 1;
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+}
+
+#loginForm {
+    text-align: center;
+}
+
+.inputForm {
+    margin: 5px;
+}
+
+#signupImage {
+    max-width: auto; /* Ensure the image doesn't exceed the container width */
+    height: 100vh; /* Maintain aspect ratio */
+}
+
+#loginButton{
+    padding: 9px 20px 9px 20px;
+    border: 1px solid #1d3557;
+    border-radius: 10px;
+}
+
+.inputForm{
+    padding: 8px;
+    border: 1px solid #1d3557;
+    border-radius: 10px;
+}
+
+#welcomeHeader{
+    font-family: monospace;
+    color: #1d3557;
+    font-size: 34px;
+}
+#signupText{
+    font-family: monospace;
+    color: #1d3557;
+    font-size: 14px;
+}
