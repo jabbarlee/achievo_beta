@@ -21,10 +21,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if(response.ok){
             const data = await response.json();
-            let finalUsername = data.message;
-            console.log(finalUsername);
+            const finalUsername = data.message;
+            result.textContent = finalUsername;
 
             localStorage.setItem('finalUsername', finalUsername);
+            console.log('Local storage file name is: ' + finalUsername);
             window.open(indexWebpage, '_self');
         }else {
             // Error response
