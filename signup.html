@@ -2,17 +2,21 @@
 <head>
     <title>Achievo</title>
     <link rel="stylesheet" type="text/css" href="./styles/login.css">
+    <script src="./js/signup.js"></script>
 </head>
 <body>
     <div id="pageDiv">
         <div id="loginSide" class="divs">
             <div id="loginForm">
-                <p id="welcomeHeader">Create an account</p>
-                <input class="inputForm" placeholder="Username">
-                <br><br>
-                <input class="inputForm" placeholder="Password">
-                <br><br>
-                <button id="loginButton">Signup</button>
+                <form id="dataForm">
+                    <p id="welcomeHeader">Create an account</p>
+                    <input type="text" class="inputForm" placeholder="Username" id="usernameValue" name="username">
+                    <br><br>
+                    <input type="text" class="inputForm" placeholder="Password" id="passwordValue" name="password">
+                    <br><br>
+                    <button id="loginButton" type="submit">Signup</button>
+                    <span id="result"></span>
+                </form>
                 <p id="signupText">Already have an account? <a href="./landing.html">Log in</a> here!</p>
             </div>
         </div>
