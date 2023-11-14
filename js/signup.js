@@ -3,7 +3,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     const dataForm = document.getElementById('dataForm');
     const result = document.getElementById('result');
-    const indexWebpage = 'file:///C:/Users/amilj/Documents/achievo_beta/index.html';
+    const indexWebpage = 'file:///C:/Users/amilj/Documents/achievo_beta/landing.html';
 
     dataForm.addEventListener('submit', async(e) => {
         e.preventDefault();

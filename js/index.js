@@ -1,5 +1,7 @@
 'use strict'
-document.addEventListener("DOMContentLoaded", function () {
-    const finalUsername = localStorage.getItem('finalUsername');
-    document.getElementById('usernameDisplay').textContent = finalUsername;
+
+document.addEventListener('DOMContentLoaded', function () {
+    const username = localStorage.getItem('loginUsernameSuccess');
+    const displayUsername = document.getElementById('usernameDisplay');
+    displayUsername.textContent = username;
 });

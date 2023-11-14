@@ -3,26 +3,28 @@
 <head>
     <title>Achievo</title>
     <link rel="stylesheet" type="text/css" href="./styles/login.css">
-    <script src="landing.js"></script>
 </head>
 <body>
     <div id="pageDiv">
         <div id="loginSide" class="divs">
             <div id="loginForm">
-                <form id="loginForm">
+                <form id="dataForm">
                     <p id="welcomeHeader">Welcome to Achievo</p>
-                    <input class="inputForm" placeholder="Username" id="usernameValue">
+                    <input class="inputForm" placeholder="Username" id="usernameValue" type="text">
                     <br><br>
-                    <input class="inputForm" placeholder="Password" id="passwordValue">
+                    <input class="inputForm" placeholder="Password" id="passwordValue" type="text">
                     <br><br>
                     <button id="loginButton">Login</button>
                 </form>
                 <p id="signupText">Don't have an account? <a href="./signup.html">Sign up</a> here!</p>
+                <p id="loginResult"></p>
             </div>
         </div>
         <div id="imageSide" class="divs">
             <img src="./images/singup_photo.jpg" id="signupImage">
         </div>
     </div>
+
+    <script src="./js/landing.js"></script>
 </body>
 </html>
