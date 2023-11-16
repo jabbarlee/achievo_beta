@@ -1,13 +1,13 @@
 const { Pool } = require('pg');
 const express = require('express');
 const cors = require('cors');
+const bodyParser = require('body-parser');
 const app = express();
 const port = 3000;
 
-app.use(express.urlencoded({ extended: true }));
-app.use(express.json());
-
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static('public'));
+app.use(cors());
 
 //Database connect
 const pool = new Pool({
@@ -53,6 +53,24 @@ app.get('/login', cors(), async (req, res) => {
     }
 });
 
+/*-------------------------INDEX.HTML REQUESTS--------------------------*/
+app.post('/insertTask', cors(), (req, res) => {
+    const username = req.body.username;
+    const task = req.body.data;
+
+    pool.query('insert into tasks (username, task_name) values($1, $2)', [username, task], (err, result) => {
+        if(err){
+          console.log('Error inserting to database' + err);
+          res.status(500).send('Database error');
+        }else {
+          res.send('Data inserted successfully');
+        }
+    });
+})
+
+
+
+/*--------------------------*/
 app.listen(port, () => {
     console.log('Server is running');
 });

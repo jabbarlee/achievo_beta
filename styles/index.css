@@ -1,5 +1,82 @@
-#welcomeHeading{
+body{
+    margin: 0;
+    padding: 0;
+    background-color: white;
+}
+
+#pageContainer{
+    display: grid;
+    grid-template-columns: 1.5fr 8.5fr;
+    gap: 0px;
+}
+
+#achievoLabel{
     font-family: monospace;
-    font-size: 18px;
+    font-size: 26px;
+    color: #1d3557;
+}
+
+#navbar{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #1d3557;
+}
+
+#buttons{
+    display: flex;
+    width: 20vh;
+    flex: 8;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+.navigationButtons{
+    display: flex;
+    width: 40vh;
+    height: 30px;
+    width: 100%;
+    padding: 20px 10px 20px 30px;
+    border: 0px;
+    background-color: #1d3557;
+    text-align: left;
+    align-items: center;
+    font-size: 17px;
+}
+.navigationButtons:hover{
+    border-radius: 20px;
+    background-color: white;
+    cursor: pointer;
+}
+
+#achievoLabelDiv{
+    flex: 2;
+}
+
+/*-----------DASHBOARD CSS*-----------*/
+
+#workplace{
+    display: flex;
+    flex-direction: column;
+}
+
+/*Dashboard divs*/
+#dashboardNav{
+    flex: 1;
+}
+
+#dashboardMain{
+    flex: 9;
+    background-color: #1d3557;
+}
+/*-------*/
+
+#usernameDisplay{
+    text-align: right;
+    margin-right: 100px;
+    font-size: 21px;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
     color: #1d3557;
 }

@@ -18,7 +18,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     document.getElementById('passwordValue').value = '';
 
                     const loginUsernameSuccess = `${data.username}`;
-                    //document.getElementById('loginResult').textContent = loginUsernameSuccess;
                     localStorage.setItem('loginUsernameSuccess', loginUsernameSuccess);
                     window.open(indexWebpage, '_self');
                 } else {

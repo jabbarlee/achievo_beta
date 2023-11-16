@@ -3,11 +3,32 @@
 <head>
     <title>Achievo</title>
     <link rel="stylesheet" type="text/css" href="./styles/index.css">
-    <script src="./js/index.js"></script>
 </head>
 <body>
-    <div id="welcomeHeading">
-        <p>Welcome back, <span id="usernameDisplay"></span>!</p>
+    <div id="pageContainer">
+        <div id="navbar">
+            <div id="achievoLabelDiv">
+                <p id="achievoLabel">Achievo</p>
+            </div>
+            <div id="buttons">
+                <button class="navigationButtons">Dashboard</button>
+                <button class="navigationButtons">My points</button>
+                <button class="navigationButtons">Store</button>
+            </div>
+        </div>
+        <div id="workplace">
+            <div id="dashboardNav">
+                <p id="usernameDisplay"></p>
+            </div>
+            <div id="dashboardMain">
+                <form id="dataForm">
+                    <input name="task" id="taskName" placeholder="Task">
+                    <button type="button" id="insertButton">Submit</button><span id="test"></span>
+                </form>
+            </div>
+        </div>
     </div>
+
+    <script src="./js/index.js"></script>
 </body>
 </html>
