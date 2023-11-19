@@ -82,12 +82,11 @@ document.addEventListener('DOMContentLoaded', async() => {
 
     insertButton.addEventListener('click', async(e) => {
         e.preventDefault();
-        console.log('Form submitted');
 
         const data = document.querySelector('input[name="task"]').value;
         const usernameLogged = localStorage.getItem('loginUsernameSuccess');
   
-        if(data === '' || ' '){
+        if(data == ''){
             console.log('Insert task name');
 
         }else{
@@ -103,7 +102,7 @@ document.addEventListener('DOMContentLoaded', async() => {
                 const responseData = await response.text();
                 test.textContent = responseData;
                 document.querySelector('input[name="task"]').value = '';
-                loadCheckboxes();
+                location.reload();
             } else {
                 console.error('POST request failed');
             }
