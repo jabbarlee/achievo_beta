@@ -87,21 +87,26 @@ document.addEventListener('DOMContentLoaded', async() => {
         const data = document.querySelector('input[name="task"]').value;
         const usernameLogged = localStorage.getItem('loginUsernameSuccess');
   
-        const response = await fetch('http://localhost:3000/insertTask', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/x-www-form-urlencoded',
-            },
-            body: `data=${data}&username=${usernameLogged}`,
-        });
+        if(data === '' || ' '){
+            console.log('Insert task name');
 
-        if (response.ok) {
-            const responseData = await response.text();
-            test.textContent = responseData;
-            document.querySelector('input[name="task"]').value = '';
-            location.reload();
-        } else {
-            console.error('POST request failed');
+        }else{
+            const response = await fetch('http://localhost:3000/insertTask', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `data=${data}&username=${usernameLogged}`,
+            });
+
+            if (response.ok) {
+                const responseData = await response.text();
+                test.textContent = responseData;
+                document.querySelector('input[name="task"]').value = '';
+                loadCheckboxes();
+            } else {
+                console.error('POST request failed');
+            }
         }
     })
 
