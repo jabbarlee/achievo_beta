@@ -58,7 +58,7 @@ app.post('/insertTask', cors(), (req, res) => {
     const username = req.body.username;
     const task = req.body.data;
 
-    pool.query('insert into tasks (username, task_name) values($1, $2)', [username, task], (err, result) => {
+    pool.query('insert into tasks (username, task_name, is_checked) values($1, $2, false)', [username, task], (err, result) => {
         if(err){
           console.log('Error inserting to database' + err);
           res.status(500).send('Database error');
