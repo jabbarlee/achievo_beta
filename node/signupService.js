@@ -69,6 +69,33 @@ app.post('/insertTask', cors(), (req, res) => {
 })
 
 
+/*-----------------------Load Checkboxes-------------------------------*/
+app.get('/loadCheckboxes', cors(), async(req, res) => {
+    try {
+        const username = req.query.username;
+        const result = await pool.query('select task_name, is_checked from tasks where username = $1 ORDER BY CASE WHEN is_checked = false THEN 0 ELSE 1 END, is_checked', [username]);
+        res.json(result.rows);
+        console.log('Server Response:', result.rows);
+        } catch (error) {
+            console.error('Error:', error);
+            res.json({ success: false });
+        }
+})
+
+app.post('/updateCheckboxState', cors(), async (req, res) => {
+    const isChecked = req.body.isChecked;
+    const username = req.body.username;
+    const checkboxName = req.body.checkboxName;
+    try{
+        const result = await pool.query('update tasks set is_checked = $1 where username = $2 and task_name = $3', [isChecked, username, checkboxName]);
+
+        console.log(`Checkbox ${checkboxName} state updated to ${isChecked}.`);
+        res.send('Checkbox state updated successfully');
+    }catch(error){
+        console.error('Error updating checkbox state in the database:', error);
+        res.status(500).send('Internal Server Error');
+    }
+})
 
 /*--------------------------*/
 app.listen(port, () => {

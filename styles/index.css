@@ -7,7 +7,7 @@ body{
 #pageContainer{
     display: grid;
     grid-template-columns: 1.5fr 8.5fr;
-    gap: 0px;
+    gap: 20px;
 }
 
 #achievoLabel{
@@ -22,7 +22,7 @@ body{
     align-items: center;
     justify-content: center;
     height: 100vh;
-    background-color: #1d3557;
+    background-color: #ced4da;
 }
 
 #buttons{
@@ -40,7 +40,7 @@ body{
     width: 100%;
     padding: 20px 10px 20px 30px;
     border: 0px;
-    background-color: #1d3557;
+    background-color: #ced4da;
     text-align: left;
     align-items: center;
     font-size: 17px;
@@ -68,8 +68,41 @@ body{
 }
 
 #dashboardMain{
+    display: flex;
+    flex-direction: row;
     flex: 9;
+    gap: 20px;
+    background-color: white;
+}
+
+#checkboxContainer{
+    font-size: 16px;
+    font-family: monospace;
+    padding: 20px;
+    background-color: #caf0f8;
+    border: 1px solid #caf0f8;
+    border-radius: 15px;
+    width:fit-content;
+    height: auto;
+}
+
+#taskName{
+    padding: 8px;
+    border: 1px solid #1d3557;
+    border-radius: 20px;
+}
+
+#insertButton{
+    padding: 8px;
+    border: 1px solid #1d3557;
+    background-color: #f1faee;
+    border-radius: 20px;
+}
+#insertButton:hover{
     background-color: #1d3557;
+    color: #f1faee;
+    animation-duration: 0.6ms;
+    cursor: pointer;
 }
 /*-------*/
 
