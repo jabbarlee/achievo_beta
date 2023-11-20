@@ -1,15 +1,18 @@
 'use strict'
 
 document.addEventListener('DOMContentLoaded', async() => {
-
     const username = localStorage.getItem('loginUsernameSuccess');
     const displayUsername = document.getElementById('usernameDisplay');
     displayUsername.textContent = username;
 
     const insertButton = document.getElementById('insertButton');
-    const dataForm = document.getElementById('dataForm');
+    const deleteButton = document.getElementById('deleteButton');
+    const editButton = document.getElementById('editButton');
+    const editLabelButton = document.getElementById('editLabelButton');
+    const cancelButton = document.getElementById('cancelButton');
+    const editInput = document.getElementById('editInput');
     const test = document.getElementById('test');
-
+    const taskInput = document.getElementById('taskName');
 
     const checkboxContainer = document.getElementById('checkboxContainer');
     function createCheckboxes(checkboxName, isChecked){
@@ -24,9 +27,23 @@ document.addEventListener('DOMContentLoaded', async() => {
         label.appendChild(document.createTextNode(checkboxName));
         const br = document.createElement('br');
         const gap = document.createElement('a');
-
+        
         checkboxContainer.appendChild(label);
         checkboxContainer.appendChild(br);
+
+        labelEdit(label);
+    }
+
+    function labelEdit(label){
+
+        label.addEventListener('mouseover', () => {
+            label.style.backgroundColor = 'lightgray';
+            label.style.cursor = 'pointer';
+        });
+        label.addEventListener('mouseout', () => {
+            label.style.backgroundColor = '';
+            label.style.cursor = '';
+        });
     }
 
     async function handleCheckboxChange(event) {
@@ -100,7 +117,6 @@ document.addEventListener('DOMContentLoaded', async() => {
 
             if (response.ok) {
                 const responseData = await response.text();
-                test.textContent = responseData;
                 document.querySelector('input[name="task"]').value = '';
                 location.reload();
             } else {
@@ -108,6 +124,37 @@ document.addEventListener('DOMContentLoaded', async() => {
             }
         }
     })
+    editLabelButton.addEventListener('click', async(e) => {
+        e.preventDefault();
 
+        const data = document.querySelector('input[name="editTask"]').value;
+        const usernameLogged = localStorage.getItem('loginUsernameSuccess');
+
+        if(data == ''){
+            test.textContent = 'Select a task to edit';
+        }else{
+            console.log('dsf');
+        }
+    })
+
+    //Open tab
+    editButton.addEventListener('click',  function showButtons(){
+        deleteButton.classList.remove('hidden');
+        cancelButton.classList.remove('hidden');
+        insertButton.classList.add('hidden');
+        editButton.classList.add('hidden');
+        editLabelButton.classList.remove('hidden');
+        //editInput.classList.remove('hidden');
+        taskInput.classList.add('hidden');
+    });
+    cancelButton.addEventListener('click', () => {
+        deleteButton.classList.add('hidden');
+        cancelButton.classList.add('hidden');
+        insertButton.classList.remove('hidden');
+        editButton.classList.remove('hidden');
+        editLabelButton.classList.add('hidden');
+        taskInput.classList.remove('hidden');
+        editInput.classList.add('hidden');
+    })
     loadCheckboxes();
 });
