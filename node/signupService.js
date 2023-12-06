@@ -105,6 +105,18 @@ app.get('/loadCheckboxes', cors(), async(req, res) => {
         }
 })
 
+app.get('/getPoints', cors(), async(req, res) => {
+    try {
+        const username = req.query.username;
+        const result = await pool.query('SELECT COUNT(*) FROM tasks where username = $1 and is_checked = true', [username]);
+        const rowCount = result.rows[0].count;
+        res.json({ rowCount });
+      } catch (err) {
+        console.error('Error executing query', err);
+        res.status(500).send('Internal Server Error');
+      } 
+})
+
 app.post('/updateCheckboxState', cors(), async (req, res) => {
     const isChecked = req.body.isChecked;
     const username = req.body.username;

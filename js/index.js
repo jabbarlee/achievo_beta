@@ -14,6 +14,18 @@ document.addEventListener('DOMContentLoaded', async() => {
     const test = document.getElementById('test');
     const taskInput = document.getElementById('taskName');
 
+    function getRowCount() {
+        fetch(`http://localhost:3000/getPoints?username=${username}`)
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                const taskQuantity = data.rowCount * 20;
+                const pointsLabel = document.getElementById('pointsLabel');
+                pointsLabel.textContent = taskQuantity;
+        })
+        .catch(error => console.error('Error fetching data:', error));
+    }
+
     class CheckboxManager {
         constructor(containerId) {
             this.container = document.getElementById(containerId);
@@ -62,11 +74,10 @@ document.addEventListener('DOMContentLoaded', async() => {
                 data.forEach(item => {
                     checkboxManager.createCheckboxes(item.task_name, item.is_checked);
                 });
+                getRowCount();
             })
             .catch(error => console.error('Error fetching data:', error));
     }
-    
-    // Example usage:
     loadCheckboxes();
 
     async function handleCheckboxChange(event) {
@@ -92,6 +103,7 @@ document.addEventListener('DOMContentLoaded', async() => {
             if (response.ok) {
                 const responseData = await response.text();
                 console.log(responseData);
+                getRowCount();
             } else {
                 console.error('Error updating checkbox state:', response.status, response.statusText);
             }
@@ -161,6 +173,7 @@ document.addEventListener('DOMContentLoaded', async() => {
                 });
                 const result = await response.json();
                 checkboxManager.deleteTasks();
+                getRowCount();
                 loadCheckboxes();
                 editInput.value = '';
             } catch (error) {
