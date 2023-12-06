@@ -7,7 +7,9 @@ const port = 3000;
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static('public'));
+app.use(express.json());
 app.use(cors());
+app.use(bodyParser.json());
 
 //Database connect
 const pool = new Pool({
@@ -68,6 +70,27 @@ app.post('/insertTask', cors(), (req, res) => {
     });
 })
 
+app.delete('/deleteData', cors(), async (req, res) => {
+    try {
+        const { username, data } = req.body;
+        await pool.connect();
+
+        const result = await pool.query(
+        'DELETE FROM tasks WHERE username = $1 AND task_name = $2',
+        [username, data]
+        );
+
+        // Check if a row was deleted
+        if (result.rowCount > 0) {
+            res.status(200).json({ message: 'User deleted successfully' });
+        } else {
+            res.status(404).json({ message: 'User not found' });
+        }
+    } catch (error) {
+        console.error('Error executing query', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+});
 
 /*-----------------------Load Checkboxes-------------------------------*/
 app.get('/loadCheckboxes', cors(), async(req, res) => {

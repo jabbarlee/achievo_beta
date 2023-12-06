@@ -14,50 +14,66 @@ document.addEventListener('DOMContentLoaded', async() => {
     const test = document.getElementById('test');
     const taskInput = document.getElementById('taskName');
 
-    const checkboxContainer = document.getElementById('checkboxContainer');
-    function createCheckboxes(checkboxName, isChecked){
-        const newCheckbox = document.createElement('input');
-        newCheckbox.type = 'checkbox';
-        newCheckbox.name = checkboxName;
-        newCheckbox.checked = isChecked;
+    class CheckboxManager {
+        constructor(containerId) {
+            this.container = document.getElementById(containerId);
+        }
+    
+        createCheckboxes(checkboxName, isChecked) {
+            const newCheckbox = document.createElement('input');
+            newCheckbox.type = 'checkbox';
+            newCheckbox.name = checkboxName;
+            newCheckbox.checked = isChecked;
+    
+            const label = document.createElement('label');
+            label.appendChild(newCheckbox);
+            label.appendChild(document.createTextNode(' '));
+            label.appendChild(document.createTextNode(checkboxName));
+            const br = document.createElement('br');
+    
+            this.container.appendChild(label);
+            this.container.appendChild(br);
 
-        const label = document.createElement('label');
-        label.appendChild(newCheckbox);
-        label.appendChild(document.createTextNode(' '));
-        label.appendChild(document.createTextNode(checkboxName));
-        const br = document.createElement('br');
-        const gap = document.createElement('a');
-        
-        checkboxContainer.appendChild(label);
-        checkboxContainer.appendChild(br);
-
-        labelEdit(label);
+            label.addEventListener('mouseover', () => {
+                label.style.backgroundColor = 'aliceblue';
+                label.style.borderRadius = '5px';
+            })
+            label.addEventListener('mouseout', () => {
+                label.style.backgroundColor = '#cbdfbd';
+            })
+            label.addEventListener('click', (event) => {
+                editInput.value = checkboxName;
+            })
+        }
+        deleteTasks() {
+            const tasks = this.container.querySelectorAll('label');
+            const breaks = this.container.querySelectorAll('br');
+            breaks.forEach(br => br.remove());
+            tasks.forEach(label => label.remove());
+            this.container.appendChild(document.createElement('br'));
+        }
     }
-
-    function labelEdit(label){
-
-        label.addEventListener('mouseover', () => {
-            label.style.backgroundColor = 'lightgray';
-            label.style.cursor = 'pointer';
-        });
-        label.addEventListener('mouseout', () => {
-            label.style.backgroundColor = '';
-            label.style.cursor = '';
-        });
+    const checkboxManager = new CheckboxManager('checkboxContainer');
+    // Fetch data and create checkboxes
+    function loadCheckboxes() {
+        fetch(`http://localhost:3000/loadCheckboxes?username=${username}`)
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(item => {
+                    checkboxManager.createCheckboxes(item.task_name, item.is_checked);
+                });
+            })
+            .catch(error => console.error('Error fetching data:', error));
     }
+    
+    // Example usage:
+    loadCheckboxes();
 
     async function handleCheckboxChange(event) {
         const username = localStorage.getItem('loginUsernameSuccess');
         const checkbox = event.target;
         const checkboxName = checkbox.name;
         const isChecked = checkbox.checked;
-    
-        if (isChecked) {
-            console.log(`Checkbox ${checkboxName} is checked: ${isChecked}.`);
-        } else {
-            console.log(`Checkbox ${checkboxName} is unchecked: ${isChecked}.`);
-            // Add your logic for when the checkbox is unchecked
-        }
     
         // Pass the correct arguments to the function
         await updateCheckboxStateInDatabase(isChecked, username, checkboxName);
@@ -83,25 +99,12 @@ document.addEventListener('DOMContentLoaded', async() => {
             console.error('Error updating checkbox state in the database:', error);
         }
     }
-    
-
     checkboxContainer.addEventListener('change', handleCheckboxChange);
-
-    function loadCheckboxes(){
-        fetch(`http://localhost:3000/loadCheckboxes?username=${username}`)
-        .then(response => response.json())
-        .then(data => {
-            data.forEach(item => {
-                createCheckboxes(item.task_name, item.is_checked);
-        });
-    })
-    } 
 
     insertButton.addEventListener('click', async(e) => {
         e.preventDefault();
 
         const data = document.querySelector('input[name="task"]').value;
-        const usernameLogged = localStorage.getItem('loginUsernameSuccess');
   
         if(data == ''){
             console.log('Insert task name');
@@ -112,13 +115,14 @@ document.addEventListener('DOMContentLoaded', async() => {
                 headers: {
                     'Content-Type': 'application/x-www-form-urlencoded',
                 },
-                body: `data=${data}&username=${usernameLogged}`,
+                body: `data=${data}&username=${username}`,
             });
 
             if (response.ok) {
                 const responseData = await response.text();
                 document.querySelector('input[name="task"]').value = '';
-                location.reload();
+                checkboxManager.deleteTasks();
+                loadCheckboxes();
             } else {
                 console.error('POST request failed');
             }
@@ -137,6 +141,35 @@ document.addEventListener('DOMContentLoaded', async() => {
         }
     })
 
+    deleteButton.addEventListener('click', async(e) => {
+        e.preventDefault();
+        const data = document.querySelector('input[name="editTask"]').value;
+        //const data = dataSelected.slice(1);
+        const username = localStorage.getItem('loginUsernameSuccess');
+
+        if(data == ''){
+            test.textContent = 'Select a task to edit';
+        }else{
+            console.log(`${data} has been deleted`);
+            try {
+                const response = await fetch('http://localhost:3000/deleteData', {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ username, data }),
+                });
+                const result = await response.json();
+                checkboxManager.deleteTasks();
+                loadCheckboxes();
+                editInput.value = '';
+            } catch (error) {
+                console.error('Error deleting user:', error);
+                alert('Error deleting user. Please check the console for details.');
+            }
+        }
+    })
+
     //Open tab
     editButton.addEventListener('click',  function showButtons(){
         deleteButton.classList.remove('hidden');
@@ -144,7 +177,7 @@ document.addEventListener('DOMContentLoaded', async() => {
         insertButton.classList.add('hidden');
         editButton.classList.add('hidden');
         editLabelButton.classList.remove('hidden');
-        //editInput.classList.remove('hidden');
+        editInput.classList.remove('hidden');
         taskInput.classList.add('hidden');
     });
     cancelButton.addEventListener('click', () => {
@@ -156,5 +189,4 @@ document.addEventListener('DOMContentLoaded', async() => {
         taskInput.classList.remove('hidden');
         editInput.classList.add('hidden');
     })
-    loadCheckboxes();
 });
