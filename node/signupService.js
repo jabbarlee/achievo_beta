@@ -96,7 +96,7 @@ app.delete('/deleteData', cors(), async (req, res) => {
 app.get('/loadCheckboxes', cors(), async(req, res) => {
     try {
         const username = req.query.username;
-        const result = await pool.query('select task_name, is_checked from tasks where username = $1 ORDER BY CASE WHEN is_checked = false THEN 0 ELSE 1 END, is_checked', [username]);
+        const result = await pool.query('select task_name, is_checked from tasks where username = $1 and is_checked = false ORDER BY CASE WHEN is_checked = false THEN 0 ELSE 1 END, is_checked', [username]);
         res.json(result.rows);
         console.log('Server Response:', result.rows);
         } catch (error) {
@@ -105,13 +105,25 @@ app.get('/loadCheckboxes', cors(), async(req, res) => {
         }
 })
 
+app.get('/loadCompletedCheckboxes', cors(), async(req, res) => {
+    try {
+        const username = req.query.username;
+        const result = await pool.query('select task_name, is_checked from tasks where username = $1 and is_checked = true ORDER BY CASE WHEN is_checked = false THEN 0 ELSE 1 END, is_checked', [username]);
+        res.json(result.rows);
+        console.log('Server Response:', result.rows);
+    } catch (error) {
+        console.error('Error:', error);
+        res.json({ success: false });
+    }
+})
+
 app.get('/getPoints', cors(), async(req, res) => {
     try {
         const username = req.query.username;
-        const result = await pool.query('SELECT COUNT(*) FROM tasks where username = $1 and is_checked = true', [username]);
-        const rowCount = result.rows[0].count;
-        res.json({ rowCount });
-      } catch (err) {
+        const result = await pool.query('select points from users_data where username = $1', [username]);
+        res.json(result.rows);
+        console.log(result.rows)
+      } catch (err) { 
         console.error('Error executing query', err);
         res.status(500).send('Internal Server Error');
       } 

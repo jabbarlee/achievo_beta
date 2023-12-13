@@ -13,19 +13,21 @@ document.addEventListener('DOMContentLoaded', async() => {
     const editInput = document.getElementById('editInput');
     const test = document.getElementById('test');
     const taskInput = document.getElementById('taskName');
+    const pointsLabel = document.getElementById('pointsLabel'); 
+    const checkedTasksDiv = document.getElementById('checkedTasks');
+    const completedTasksLabel = document.getElementById('completedTasksLabel');
+
+    completedTasksLabel.style.cursor = 'pointer';
+    completedTasksLabel.style.color = '#1d3557';
 
     function getRowCount() {
         fetch(`http://localhost:3000/getPoints?username=${username}`)
             .then(response => response.json())
             .then(data => {
-                console.log(data);
-                const taskQuantity = data.rowCount * 20;
-                const pointsLabel = document.getElementById('pointsLabel');
-                pointsLabel.textContent = taskQuantity;
+                pointsLabel.textContent = data[0].points;
         })
         .catch(error => console.error('Error fetching data:', error));
     }
-
     class CheckboxManager {
         constructor(containerId) {
             this.container = document.getElementById(containerId);
@@ -49,6 +51,7 @@ document.addEventListener('DOMContentLoaded', async() => {
             label.addEventListener('mouseover', () => {
                 label.style.backgroundColor = 'aliceblue';
                 label.style.borderRadius = '5px';
+
             })
             label.addEventListener('mouseout', () => {
                 label.style.backgroundColor = '#cbdfbd';
@@ -57,6 +60,7 @@ document.addEventListener('DOMContentLoaded', async() => {
                 editInput.value = checkboxName;
             })
         }
+
         deleteTasks() {
             const tasks = this.container.querySelectorAll('label');
             const breaks = this.container.querySelectorAll('br');
@@ -65,7 +69,34 @@ document.addEventListener('DOMContentLoaded', async() => {
             this.container.appendChild(document.createElement('br'));
         }
     }
-    const checkboxManager = new CheckboxManager('checkboxContainer');
+
+    const checkboxManager = new CheckboxManager('uncheckedTasks');
+    const checkboxManagerForChecked = new CheckboxManager('checkedTasks');
+
+    completedTasksLabel.addEventListener('click', () => {
+        if(checkedTasksDiv.style.display === 'none'){
+            checkedTasksDiv.style.display = 'block';
+            checkboxManagerForChecked.deleteTasks();
+            completedTasksLabel.textContent = ' < Completed Tasks';
+            loadCheckedCheckboxes();
+        }else{
+            checkedTasksDiv.style.display = 'none';
+            completedTasksLabel.textContent = ' > Completed Tasks';
+        }
+    })
+
+    function loadCheckedCheckboxes(){
+        fetch(`http://localhost:3000/loadCompletedCheckboxes?username=${username}`)
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(item => {
+                    checkboxManagerForChecked.createCheckboxes(item.task_name, item.is_checked);
+                });
+                getRowCount();
+            })
+        .catch(error => console.error('Error fetching data:', error));
+    }
+
     // Fetch data and create checkboxes
     function loadCheckboxes() {
         fetch(`http://localhost:3000/loadCheckboxes?username=${username}`)
@@ -85,7 +116,7 @@ document.addEventListener('DOMContentLoaded', async() => {
         const checkbox = event.target;
         const checkboxName = checkbox.name;
         const isChecked = checkbox.checked;
-    
+     
         // Pass the correct arguments to the function
         await updateCheckboxStateInDatabase(isChecked, username, checkboxName);
     }
@@ -175,6 +206,8 @@ document.addEventListener('DOMContentLoaded', async() => {
                 checkboxManager.deleteTasks();
                 getRowCount();
                 loadCheckboxes();
+                checkboxManagerForChecked.deleteTasks();  
+                loadCheckedCheckboxes();
                 editInput.value = '';
             } catch (error) {
                 console.error('Error deleting user:', error);

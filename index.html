@@ -23,16 +23,26 @@
             <div id="dashboardMain">
                 <div id="tasks">
                     <div id="checkboxContainer">
-                        <form id="dataForm">
-                            <input name="task" id="taskName" placeholder="Task name">
-                            <button type="button" id="insertButton">Add</button>
-                            <button type="button" id="editButton">Edit</button>
-                            <input name="editTask" id="editInput" placeholder="Task name" class="hidden">
-                            <button type="button" id="editLabelButton" class="hidden">Edit</button>
-                            <button type="button" id="deleteButton" class="hidden">Delete</button>
-                            <button type="button" id="cancelButton" class="hidden">Cancel</button>
-                        </form>
-                        <br>
+                        <div id="manageTasks">
+                            <div id="uncheckedTasks">
+                                <form id="dataForm">
+                                    <input name="task" id="taskName" placeholder="Task name">
+                                    <button type="button" id="insertButton">Add</button>
+                                    <button type="button" id="editButton">Edit</button>
+                                    <input name="editTask" id="editInput" placeholder="Task name" class="hidden">
+                                    <button type="button" id="editLabelButton" class="hidden">Edit</button>
+                                    <button type="button" id="deleteButton" class="hidden">Delete</button>
+                                    <button type="button" id="cancelButton" class="hidden">Cancel</button>
+                                </form>
+                                <br>
+                            </div>
+                            <div>
+                                <p id="completedTasksLabel">> Completed Tasks</p>
+                            </div>
+                            <div id="checkedTasks" style="display: none;">
+
+                            </div>
+                        </div>
                     </div>
                     <p id="test"></p>
                 </div>
